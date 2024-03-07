@@ -6,6 +6,11 @@ import DefaultLayout from './views/layout/DefaultLayout.tsx'
 import Home from './views/Home.tsx'
 import TableList from './views/TableList.tsx'
 
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
+
 
 const router = createBrowserRouter([
   {
@@ -17,13 +22,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/table/:username",
+        path: "/table",
         element: <TableList />,
       },
     ],
   },
-]);
-
+])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
