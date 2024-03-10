@@ -5,7 +5,7 @@ const DefaultLayout = () => {
   return (
     <>
         <Header />
-        <div>
+        <div className="w-screen md:w-4/5 m-auto h-screen">
           <Outlet />
         </div>
     </>
