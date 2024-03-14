@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { NavLink } from "react-router-dom"
+import { NavLink, Link } from "react-router-dom"
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -46,8 +46,6 @@ const Header = () => {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="#Stash-management-system"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -58,7 +56,7 @@ const Header = () => {
                 textDecoration: 'none',
               }}
             >
-              SMS
+              <Link to="/">SMS</Link>
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -97,12 +95,11 @@ const Header = () => {
                 ))}
               </Menu>
             </Box>
+
             <AllInboxIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
             <Typography
               variant="h5"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -114,7 +111,7 @@ const Header = () => {
                 textDecoration: 'none',
               }}
             >
-              SMS
+              <Link to="/">SMS</Link>
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page, index) => (
