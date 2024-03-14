@@ -28,23 +28,20 @@ const TheModal = ({open, close, children, name}: PropsWithChildren<TheModalProps
     }
 
     return (
-        <>
-            <Modal
-                open={open}
-                onClose={(close)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h4" component="h1">
-                        {name}
-                    </Typography>
-                    {children}
-                </Box>
-            </Modal>
-        </>
-
-
+        <Modal
+            open={open}
+            onClose={(close)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h4" component="h1">
+                    {name}
+                </Typography>
+                { children }
+                
+            </Box>
+        </Modal>
     )
 }
 

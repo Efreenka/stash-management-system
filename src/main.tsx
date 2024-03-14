@@ -8,10 +8,15 @@ import Home from './views/Home.tsx'
 import TableList from './views/TableList.tsx'
 import NotFound from './views/NotFound.tsx'
 
+
+import { csCZ as coreCsCZ } from '@mui/material/locale'
+import { csCZ } from '@mui/x-date-pickers/locales'
+
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+import LoginProvider from './context/LoginProvider.tsx'
 
 const theme = createTheme({
   palette: {
@@ -28,8 +33,7 @@ const theme = createTheme({
       contrastText: '#000',
     },
   },
-})
-
+}, csCZ, coreCsCZ)
 const router = createBrowserRouter([
   {
     path: "/",
@@ -53,8 +57,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <LoginProvider>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </LoginProvider>
   </React.StrictMode>
 )

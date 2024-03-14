@@ -15,18 +15,16 @@ const AddStahForm = () => {
     }
 
     return (
-        <>
-            <FormControl className="flex flex-col gap-4">
-                <TextField
-                    required
-                    id="outlined-required"
-                    label="Název tabulky"
-                    value={formData.name}
-                    onChange={(event) => setFormData({name: event.target.value})}
-                />
-                <Button onClick={handleAddStash}>Vytvořit</Button>
-            </FormControl>
-        </>
+        <FormControl className="flex flex-col gap-4">
+            <TextField
+                required
+                id="outlined-required"
+                label="Název tabulky"
+                value={formData.name}
+                onChange={(event) => setFormData({name: event.target.value})}
+            />
+            <Button onClick={handleAddStash}>Vytvořit</Button>
+        </FormControl>
     )
 }
 
