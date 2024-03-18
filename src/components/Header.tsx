@@ -158,7 +158,7 @@ const Header = () => {
             </Menu>
           </Box>
           :
-          <p>Přihlásit se</p>
+          <p><Link to="/prihlaseni" >Přihlásit se</Link></p>
           }
           
         </Toolbar>

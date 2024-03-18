@@ -1,10 +1,10 @@
-import { LoginRequest, LoginResponse, RegisterRequest } from "../types/Api"
+import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest } from "../types/Api"
 import { TableType } from "../types/TableType"
 import { TableItem } from "../types/TableItem"
 
 const BASE_URL = "https://cimaf.cz"
 
-const useApi = () => {
+const useApi = (token: string) => {
     const loginRequest = async (loginData: LoginRequest): Promise<LoginResponse | undefined> => {
         try {
             const response = await fetch(`${BASE_URL}/login`, {
@@ -58,39 +58,48 @@ const useApi = () => {
     }
 
     const getStash = async (): Promise<TableType[] | undefined> => {
-        try {
-            const response = await fetch(`${BASE_URL}/stash`)
-            const stash = await response.json()
-            return stash
-        } catch (error) {
-            console.error(`Error getting stash: ${error}`)
+
+        if(token) {
+            try {
+
+                const response = await fetch(`${BASE_URL}/stash`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+    
+                if(response.ok) {
+                    const stash = await response.json()
+                    return stash
+                }
+                
+            } catch (error) {
+                console.error(`Error getting stash: ${error}`)
+            }
         }
     }
 
-    const addStash = async (name: string): Promise<TableType | undefined> => {
+    const addStash = async (data: AddStashFormDataRequest): Promise<TableType | undefined> => {
         try {
             const response = await fetch(`${BASE_URL}/stash`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ name })
+                body: JSON.stringify( data )
             })
-            const newStash = await response.json()
-            return newStash
+
+            if(response.ok) {
+                const newStash = await response.json()
+                return newStash
+            }
+            
         } catch (error) {
             console.error(`Error adding stash: ${error}`)
-        }
-    }
-
-    const getOneStash = async (id: number): Promise<TableType | undefined> => {
-        try {
-            const response = await fetch(`${BASE_URL}/stash/${id}`)
-            const oneStash = await response.json()
-            return oneStash
-        } catch (error) {
-            console.error(`Error getting one stash${id}: ${error}`)
         }
     }
 
@@ -115,7 +124,8 @@ const useApi = () => {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({ items })
             })
@@ -127,7 +137,7 @@ const useApi = () => {
     }
     
     
-    return ({ loginRequest, registerRequest, getStash, addStash, getOneStash, deleteOneStash, addProduct })
+    return ({ loginRequest, registerRequest, getStash, addStash, deleteOneStash, addProduct })
 }
 
 export default useApi

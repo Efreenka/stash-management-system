@@ -1,26 +1,49 @@
-import { useState } from "react"
+import { useState, Dispatch, SetStateAction } from "react"
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { FormControl } from '@mui/material'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { csCZ } from '@mui/x-date-pickers/locales'
+import { useCookies } from 'react-cookie'
+import useApi from "../hooks/useApi"
+import { TableItem } from "../types/TableItem"
+import { TableType } from "../types/TableType"
 
-interface CreateProductFormData {
-  name: string,
-  brand: string,
-  weight: number | null,
-  expiration: Dayjs | null
+interface CreateProductFormProps {
+  table: TableType
+  setTables: Dispatch<SetStateAction<TableType[]>>
+  close: () => void
 }
 
-const CreateProductForm = () => {
-  const [formData, setFormData] = useState<CreateProductFormData>({name: "", brand: "", weight: null, expiration: dayjs(new Date())})
+const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) => {
+  const [formData, setFormData] = useState<TableItem>({name: "", brand: "", weight: 0, expiration: "2013-03-31T14:32:22Z"})
 
-  const handleAddProduct = () => {
-      
+  const [cookies] = useCookies<string>(['access_token'])
+
+  const { addProduct } = useApi(cookies.access_token)
+
+  const handleAddProduct = async () => {
+    const allItems = [...table.items, formData]
+    const response = await addProduct(table.id, allItems)
+    table.items = allItems
+
+
+    
+    if(response) {
+      setTables((prev) => {
+        const index = prev.findIndex((t) => {
+          return t.id === table.id
+        })
+        console.log(index)
+        prev.splice(index, 1, table)
+        console.log(prev)
+        return prev
+      })
+      close()
+    }
   }  
 
   return (
@@ -50,7 +73,7 @@ const CreateProductForm = () => {
           onChange={(event) => setFormData({...formData, weight: parseInt(event.target.value)})}
       />
 
-      <LocalizationProvider dateAdapter={AdapterDayjs} localeText={csCZ.components.MuiLocalizationProvider.defaultProps.localeText}>
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DatePicker', 'DatePicker']}>
           <DemoItem label="Expirace">
             <DatePicker
@@ -60,7 +83,7 @@ const CreateProductForm = () => {
             
           </DemoItem>
         </DemoContainer>
-      </LocalizationProvider>
+      </LocalizationProvider> */}
       
       <Button onClick={handleAddProduct}>Vytvořit</Button>
     </FormControl>

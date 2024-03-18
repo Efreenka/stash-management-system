@@ -1,7 +1,7 @@
 export interface TableItem {
-    id: number
+    id?: number
     name: string
     brand: string
     weight: number
-    expiration: number
+    expiration: any
 }
