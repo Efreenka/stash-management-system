@@ -3,20 +3,20 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material'
+import { CookiesProvider } from 'react-cookie'
 import DefaultLayout from './views/layout/DefaultLayout.tsx'
 import Home from './views/Home.tsx'
 import TableList from './views/TableList.tsx'
 import NotFound from './views/NotFound.tsx'
 
-
-import { csCZ as coreCsCZ } from '@mui/material/locale'
-import { csCZ } from '@mui/x-date-pickers/locales'
+import LoginProvider from './context/LoginProvider.tsx'
+import LoginView from './views/LoginView.tsx'
+import RegistrationView from './views/RegistrationView'
 
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import LoginProvider from './context/LoginProvider.tsx'
 
 const theme = createTheme({
   palette: {
@@ -33,7 +33,7 @@ const theme = createTheme({
       contrastText: '#000',
     },
   },
-}, csCZ, coreCsCZ)
+})
 const router = createBrowserRouter([
   {
     path: "/",
@@ -47,6 +47,14 @@ const router = createBrowserRouter([
         path: "/tabulky",
         element: <TableList />,
       },
+      {
+        path: "/prihlaseni",
+        element: <LoginView />,
+      },
+      {
+        path: "/registrace",
+        element: <RegistrationView/>,
+      },
     ],
   },
   {
@@ -57,10 +65,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <LoginProvider>
-      <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </LoginProvider>
+    <CookiesProvider>
+      <LoginProvider>
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </LoginProvider>
+    </CookiesProvider>
   </React.StrictMode>
 )

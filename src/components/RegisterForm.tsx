@@ -41,7 +41,7 @@ const RegisterForm = () => {
                 onChange={(event) => setFormData({...formData, password: event.target.value})}
             />
 
-            <Button onClick={handleRegistration}>Odeslat</Button>
+            <Button onClick={handleRegistration}>Registrovat se</Button>
         </FormControl>
     )
 }

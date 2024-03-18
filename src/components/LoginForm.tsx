@@ -36,7 +36,7 @@ const LoginForm = () => {
                 onChange={(event) => setFormData({...formData, password: event.target.value})}
             />
 
-            <Button onClick={handleLogin}>Odeslat</Button>
+            <Button onClick={handleLogin}>Přihlásit se</Button>
         </FormControl>
     )
 }
