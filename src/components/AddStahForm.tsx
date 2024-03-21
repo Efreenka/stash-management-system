@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { FormControl } from '@mui/material'
 import useApi from "../hooks/useApi"
-import { useCookies } from 'react-cookie'
 import { AddStashFormDataRequest } from "../types/Api"
 import { TableType } from "../types/TableType"
 
@@ -14,9 +13,8 @@ interface AddStashFormDataProps {
 
 const AddStahForm = ({setTables, close}: AddStashFormDataProps) => {
     const [formData, setFormData] = useState<AddStashFormDataRequest>({name: ""})
-    const [cookies] = useCookies<string>(['access_token'])
 
-    const { addStash } = useApi(cookies.access_token)
+    const { addStash } = useApi()
 
     const handleAddStash = async () => {
         const response = await addStash(formData)
