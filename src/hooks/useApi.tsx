@@ -1,10 +1,16 @@
-import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest } from "../types/Api"
+import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest, User } from "../types/Api"
 import { TableType } from "../types/TableType"
 import { TableItem } from "../types/TableItem"
+import { useLogin } from "../context/LoginProvider"
 
-const BASE_URL = "https://cimaf.cz"
+const BASE_URL = "https://cimaf.cz/sms/api"
+// const BASE_URL = "https://cimaf.cz"
+// const BASE_URL = "https://[2001:15e8:110:7d00::178]"
 
-const useApi = (token: string) => {
+const useApi = () => {
+    const { getToken } = useLogin()
+    const token = getToken()
+
     const loginRequest = async (loginData: LoginRequest): Promise<LoginResponse | undefined> => {
         try {
             const response = await fetch(`${BASE_URL}/login`, {
@@ -54,6 +60,36 @@ const useApi = (token: string) => {
             
         } catch (error) {
             console.error(`Error adding register user: ${error}`)
+        }
+    }
+
+    const getUser = async (): Promise<User | undefined> => {
+
+        if(token) {
+            try {
+
+                const response = await fetch(`${BASE_URL}/user`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+    
+                if(response.ok) {
+                    const user = await response.json()
+                    return user
+                } else if (response.status === 401) {
+                    console.error("Token není platný!")
+                } else if (response.status === 404) {
+                    console.error("Uživatel nenalezen!")
+                } else if(response.status === 500) {
+                    console.error("Chyba na backendu!")
+                }
+                
+            } catch (error) {
+                console.error(`Error getting stash: ${error}`)
+            }
         }
     }
 
@@ -137,7 +173,7 @@ const useApi = (token: string) => {
     }
     
     
-    return ({ loginRequest, registerRequest, getStash, addStash, deleteOneStash, addProduct })
+    return ({ loginRequest, registerRequest, getUser, getStash, addStash, deleteOneStash, addProduct })
 }
 
 export default useApi

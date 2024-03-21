@@ -15,29 +15,32 @@ interface CreateProductFormProps {
   table: TableType
   setTables: Dispatch<SetStateAction<TableType[]>>
   close: () => void
+  editItem: TableItem
 }
 
-const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) => {
-  const [formData, setFormData] = useState<TableItem>({name: "", brand: "", weight: 0, expiration: "2013-03-31T14:32:22Z"})
+const CreateProductForm = ({table, setTables, close, editItem}: CreateProductFormProps) => {
+  const [formData, setFormData] = useState<TableItem>(editItem)
 
   const { addProduct } = useApi()
 
-  const handleAddProduct = async () => {
-    console.log(table.items)
-    const allItems: TableItem[] = [...table.items, formData]
-    console.log(allItems)
-    const response: TableItem[] | undefined = await addProduct(table.id, allItems)
-    console.log(response)
+  const handleEditProduct = async () => {
+    const index = table.items.findIndex((i) => {
+        return i.id === editItem.id
+    })
+
+    table.items.splice(index, 1, formData)
+
+    const response: TableItem[] | undefined = await addProduct(table.id, table.items)
+    
     table.items = response!
     
     if(response) {
       setTables((prev) => {
-        const index: number = prev.findIndex((t) => {
+        const index = prev.findIndex((t) => {
           return t.id === table.id
         })
-        console.log(index)
+        
         prev.splice(index, 1, table)
-        console.log(prev)
         return [...prev]
       })
       close()
@@ -83,7 +86,7 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
         </DemoContainer>
       </LocalizationProvider> */}
       
-      <Button onClick={handleAddProduct}>Vytvořit</Button>
+      <Button onClick={handleEditProduct}>Upravit</Button>
     </FormControl>
   )
 }

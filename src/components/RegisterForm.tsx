@@ -5,12 +5,10 @@ import { FormControl } from '@mui/material'
 import { RegisterRequest } from '../types/Api'
 import useApi  from "../hooks/useApi"
 
-
 const RegisterForm = () => {
     const [formData, setFormData] = useState<RegisterRequest>({name: "", email: "", password: ""})
 
     const { registerRequest } = useApi()
-    
 
     const handleRegistration = async () => {
       const response = await registerRequest(formData)
@@ -30,6 +28,7 @@ const RegisterForm = () => {
                 required
                 id="outlined-required"
                 label="Email"
+                type="email"
                 value={formData.email}
                 onChange={(event) => setFormData({...formData, email: event.target.value})}
             />
@@ -37,6 +36,7 @@ const RegisterForm = () => {
                 required
                 id="outlined-required"
                 label="Heslo"
+                type="password"
                 value={formData.password}
                 onChange={(event) => setFormData({...formData, password: event.target.value})}
             />
