@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction, useEffect } from "react"
+import { useState, Dispatch, SetStateAction } from "react"
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { FormControl } from '@mui/material'
@@ -7,71 +7,54 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { useCookies } from 'react-cookie'
 import useApi from "../hooks/useApi"
 import { TableItem } from "../types/TableItem"
 import { TableType } from "../types/TableType"
-import { MemoryProducts } from "../types/Api"
-import Autocomplete  from "@mui/material/Autocomplete"
 
 interface CreateProductFormProps {
   table: TableType
   setTables: Dispatch<SetStateAction<TableType[]>>
   close: () => void
+  editItem: TableItem
 }
 
-const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) => {
-  const [formData, setFormData] = useState<TableItem>({name: "", quantity: 1, brand: "", weight: 0, expiration: dayjs(), warning_days: 1})
-  const [memoryData, setMemoryData] = useState<MemoryProducts>({brands: [], names: []})
+const CreateProductForm = ({table, setTables, close, editItem}: CreateProductFormProps) => {
+  const [formData, setFormData] = useState<TableItem>(editItem)
 
-  const { addProduct, getMemoryProducts } = useApi()
+  const { addProduct } = useApi()
 
-  const handleAddProduct = async () => {
-    const allItems = [...table.items, formData]
-    const response = await addProduct(table.id, allItems)
-    table.items = allItems
+  const handleEditProduct = async () => {
+    const index = table.items.findIndex((i) => {
+        return i.id === editItem.id
+    })
 
+    table.items.splice(index, 1, formData)
 
+    const response: TableItem[] | undefined = await addProduct(table.id, table.items)
+    
+    table.items = response!
     
     if(response) {
       setTables((prev) => {
         const index = prev.findIndex((t) => {
           return t.id === table.id
         })
-        console.log(index)
+        
         prev.splice(index, 1, table)
-        console.log(prev)
-        return prev
+        return [...prev]
       })
       close()
     }
-  } 
-
-  useEffect(() => {
-    getMemoryProducts()
-      .then((data) => {
-        if(data) {
-          setMemoryData(data)
-        }
-      })
-  }, [])
+  }  
 
   return (
     <FormControl className="flex flex-col gap-4">
-      <Autocomplete
-        freeSolo
-        options={memoryData.names}
-        id="controlled-demo"
+      <TextField
+        required
+        id="outlined-required"
+        label="Název produktu"
         value={formData.name}
-        onChange={(event: any, newValue: any) => {
-          setFormData({...formData, name: newValue})
-        }}
-  
-        renderInput={(params) => (
-          <TextField {...params} label="Název Produktu" variant="outlined" id="outlined-required"  
-          onChange={(event: any) => setFormData({...formData, name: event.target.value})}
-          />
-        )}
+        onChange={(event) => setFormData({...formData, name: event.target.value})}
       />
 
       <TextField
@@ -82,22 +65,14 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
         inputProps={{ min: 1, max: 10000000 }}
         value={formData.quantity}
         onChange={(event) => setFormData({...formData, quantity: parseInt(event.target.value)})}
-      />
+      />  
 
-      <Autocomplete
-        freeSolo
-        options={memoryData.brands}
-        id="controlled-demo"
+      <TextField
+        required
+        id="outlined-required"
+        label="Značka produktu"
         value={formData.brand}
-        onChange={(event: any, newValue: any) => {
-          setFormData({...formData, brand: newValue})
-        }}
-  
-        renderInput={(params) => (
-          <TextField {...params} label="Značka produktu" variant="outlined" id="outlined-required"  
-          onChange={(event: any) => setFormData({...formData, brand: event.target.value})}
-          />
-        )}
+        onChange={(event) => setFormData({...formData, brand: event.target.value})}
       />
     
       <TextField
@@ -115,7 +90,7 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
           <DemoItem label="Expirace">
             <DatePicker
               format="DD. MM. YYYY"
-              defaultValue={formData.expiration}
+              defaultValue={dayjs(formData.expiration)}
               onChange={(value) => setFormData({...formData, expiration: dayjs(value)})}
             />
           </DemoItem>
@@ -132,7 +107,7 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
         onChange={(event) => setFormData({...formData, warning_days: parseInt(event.target.value)})}
       />
       
-      <Button onClick={handleAddProduct}>Vytvořit</Button>
+      <Button onClick={handleEditProduct}>Upravit</Button>
     </FormControl>
   )
 }

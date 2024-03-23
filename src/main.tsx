@@ -13,6 +13,8 @@ import LoginProvider from './context/LoginProvider.tsx'
 import LoginView from './views/LoginView.tsx'
 import RegistrationView from './views/RegistrationView'
 
+import { csCZ } from '@mui/x-date-pickers/locales'
+
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
@@ -33,7 +35,7 @@ const theme = createTheme({
       contrastText: '#000',
     },
   },
-})
+}, csCZ)
 const router = createBrowserRouter([
   {
     path: "/",

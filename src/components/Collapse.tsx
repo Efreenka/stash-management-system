@@ -15,8 +15,8 @@ const Collapse = ({children, name}: PropsWithChildren<CollapseProps>) => {
                 // bgcolor: 'background.paper',
                 // boxShadow: 1,
                 // borderRadius: 1,
-                minWidth: 400,
-                maxWidth: 900,
+                minWidth: 250,
+                maxWidth: 880,
               }}>
         <AccordionSummary
             expandIcon={<ArrowDropDownIcon />}
