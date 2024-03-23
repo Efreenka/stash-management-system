@@ -12,9 +12,9 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import WarningIcon from '@mui/icons-material/Warning'
 import useApi from "../hooks/useApi"
 import { TableItem } from "../types/TableItem"
+import dayjs from 'dayjs'
 
 interface StashProps {
   table: TableType
@@ -31,8 +31,31 @@ const Stash = ({table, setTables, edit}: StashProps) => {
   // }}
 
   const { addProduct } = useApi()
-
   
+  const determineWarning = (warningDays: number, expiration: any) => {
+    let warningColor = ""
+    let warningMessage = ""
+    const now = dayjs().format('YYYY-MM-DD')
+    const days: number = dayjs(expiration).diff(now, "day")
+
+    const dayBowed = days > 4 ? "dnů" : "dny" 
+
+    if (days > warningDays) {
+      warningColor = "green"
+      warningMessage = `Produkt expiruje za: ${days} ${dayBowed}!`
+    } else if ( warningDays >= days && days > 0) {
+      warningColor = "orange"
+      warningMessage = `Produkt expiruje za: ${days} ${dayBowed}!`
+    } else if (days === 0) {
+      warningColor = "red"
+      warningMessage = "Produkt expiruje dnes!"
+    } else if (days <= -1) {
+      warningColor = "red"
+      warningMessage = "Expirace již vypršela!"
+    }
+
+    return {warningMessage, warningColor}
+  }
   
   const handleDelete = async(item: any) => {
     const newItems = table.items.filter((i) => {
@@ -55,11 +78,12 @@ const Stash = ({table, setTables, edit}: StashProps) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: { xs: 250, sm:700, md: 840 } }} aria-label="simple table">
         <TableHead>
           <TableRow>
           <TableCell align="center"></TableCell>
             <TableCell align="center">Název produktu</TableCell>
+            <TableCell align="center">Množství</TableCell>
             <TableCell align="center">Značka</TableCell>
             <TableCell align="center">Váha&nbsp;(g)</TableCell>
             <TableCell align="center">Expirace</TableCell>
@@ -67,45 +91,49 @@ const Stash = ({table, setTables, edit}: StashProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {table.items.map((item, index) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell align="center"><div className=' bg-black w-5 h-5'></div></TableCell>
-              <TableCell align="center" component="th" scope="row" width="150">
-                {item.name}
-              </TableCell>
-              <TableCell align="center">{item.brand}</TableCell>
-              <TableCell align="center">{item.weight}</TableCell>
-              <TableCell align="center">{item.expiration}</TableCell>
-              <TableCell align="center">
-                <Tooltip title="Upravit">
-                  <IconButton onClick={() => {edit(item)}}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Smazat">
-                  <IconButton onClick={() => {handleDelete(item)}}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={
-                    <p>
-                      <Typography color="inherit">Tooltip with HTML</Typography>
-                      <em>{"And here's"}</em> <b>{'some'}</b> <u>{'amazing content'}</u>.{' '}
-                      {"It's very engaging. Right?"}
-                    </p>
-                  }
-                >
-                  <IconButton>
-                    <WarningIcon />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-          ))}
+          {table.items.map((item, index) => {
+            const {warningMessage, warningColor} = determineWarning(item.warning_days, dayjs(item.expiration).format('YYYY-MM-DD'))
+
+            return (
+              <TableRow
+                key={index}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell align="center">
+                  <Tooltip
+                      title={
+                        <h3>
+                          <Typography color="inherit"><b>{warningMessage}</b> </Typography> 
+                        </h3>
+                      }
+                  >
+                    <IconButton>
+                      <div style={{backgroundColor: warningColor}} className='w-5 h-5'></div>
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+                <TableCell align="center" component="th" scope="row" width="150">
+                  {item.name}
+                </TableCell>
+                <TableCell align="center">{item.quantity}</TableCell>
+                <TableCell align="center">{item.brand}</TableCell>
+                <TableCell align="center">{item.weight}</TableCell>
+                <TableCell align="center">{dayjs(item.expiration).format('DD. MM. YYYY')}</TableCell>
+                <TableCell align="center">
+                  <Tooltip title="Upravit">
+                    <IconButton onClick={() => {edit(item)}}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Smazat">
+                    <IconButton onClick={() => {handleDelete(item)}}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </TableContainer>

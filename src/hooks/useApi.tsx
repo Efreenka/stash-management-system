@@ -1,4 +1,4 @@
-import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest, User } from "../types/Api"
+import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest, User, MemoryProducts } from "../types/Api"
 import { TableType } from "../types/TableType"
 import { TableItem } from "../types/TableItem"
 import { useLogin } from "../context/LoginProvider"
@@ -171,9 +171,32 @@ const useApi = () => {
             console.error(`Error adding product: ${error}`)
         }
     }
+
+    const getMemoryProducts = async (): Promise<MemoryProducts | undefined> => {
+
+        if(token) {
+            try {
+
+                const response = await fetch(`${BASE_URL}/select`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
     
+                if(response.ok) {
+                    const memoryProducts = await response.json()
+                    return memoryProducts
+                }
+                
+            } catch (error) {
+                console.error(`Error getting memoryProducts: ${error}`)
+            }
+        }
+    }
     
-    return ({ loginRequest, registerRequest, getUser, getStash, addStash, deleteOneStash, addProduct })
+    return ({ loginRequest, registerRequest, getUser, getStash, addStash, deleteOneStash, addProduct, getMemoryProducts })
 }
 
 export default useApi

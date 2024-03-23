@@ -50,41 +50,62 @@ const CreateProductForm = ({table, setTables, close, editItem}: CreateProductFor
   return (
     <FormControl className="flex flex-col gap-4">
       <TextField
-          required
-          id="outlined-required"
-          label="Název produktu"
-          value={formData.name}
-          onChange={(event) => setFormData({...formData, name: event.target.value})}
+        required
+        id="outlined-required"
+        label="Název produktu"
+        value={formData.name}
+        onChange={(event) => setFormData({...formData, name: event.target.value})}
       />
+
       <TextField
-          required
-          id="outlined-required"
-          label="Značka produktu"
-          value={formData.brand}
-          onChange={(event) => setFormData({...formData, brand: event.target.value})}
+        required
+        id="outlined-required, formatted-numberformat-input"
+        label="Množství"
+        type="number"
+        inputProps={{ min: 1, max: 10000000 }}
+        value={formData.quantity}
+        onChange={(event) => setFormData({...formData, quantity: parseInt(event.target.value)})}
+      />  
+
+      <TextField
+        required
+        id="outlined-required"
+        label="Značka produktu"
+        value={formData.brand}
+        onChange={(event) => setFormData({...formData, brand: event.target.value})}
       />
     
       <TextField
-          required
-          id="outlined-required, formatted-numberformat-input"
-          label="Váha produktu"
-          type="number"
-          inputProps={{ min: 0, max: 10000000 }}
-          value={formData.weight}
-          onChange={(event) => setFormData({...formData, weight: parseInt(event.target.value)})}
+        required
+        id="outlined-required, formatted-numberformat-input"
+        label="Váha produktu&nbsp;(g)"
+        type="number"
+        inputProps={{ min: 0, max: 10000000 }}
+        value={formData.weight}
+        onChange={(event) => setFormData({...formData, weight: parseInt(event.target.value)})}
       />
 
-      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DatePicker', 'DatePicker']}>
           <DemoItem label="Expirace">
             <DatePicker
-              format="DD-MM-YYYY"
-              defaultValue={formData.expiration}
+              format="DD. MM. YYYY"
+              defaultValue={dayjs(formData.expiration)}
+              onChange={(value) => setFormData({...formData, expiration: dayjs(value)})}
             />
-            
           </DemoItem>
         </DemoContainer>
-      </LocalizationProvider> */}
+      </LocalizationProvider>
+
+      <TextField
+        required
+        id="outlined-required, formatted-numberformat-input"
+        label="Varování&nbsp;(dny)"
+        type="number"
+        inputProps={{ min: 1, max: 10000000 }}
+        value={formData.warning_days}
+        onChange={(event) => setFormData({...formData, warning_days: parseInt(event.target.value)})}
+      />
       
       <Button onClick={handleEditProduct}>Upravit</Button>
     </FormControl>

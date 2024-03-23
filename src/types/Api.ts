@@ -24,3 +24,8 @@ export interface RegisterRequest {
 export interface AddStashFormDataRequest {
     name: string
 }
+
+export interface MemoryProducts {
+    brands: string[]
+    names: string[]
+}
