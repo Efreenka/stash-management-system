@@ -7,7 +7,6 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { useCookies } from 'react-cookie'
 import useApi from "../hooks/useApi"
 import { TableItem } from "../types/TableItem"
 import { TableType } from "../types/TableType"
@@ -27,21 +26,22 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
   const { addProduct, getMemoryProducts } = useApi()
 
   const handleAddProduct = async () => {
-    const allItems = [...table.items, formData]
-    const response = await addProduct(table.id, allItems)
-    table.items = allItems
-
-
+    console.log(table.items)
+    const allItems: TableItem[] = [...table.items, formData]
+    console.log(allItems)
+    const response: TableItem[] | undefined = await addProduct(table.id, allItems)
+    console.log(response)
+    table.items = response!
     
     if(response) {
       setTables((prev) => {
-        const index = prev.findIndex((t) => {
+        const index: number = prev.findIndex((t) => {
           return t.id === table.id
         })
         console.log(index)
         prev.splice(index, 1, table)
         console.log(prev)
-        return prev
+        return [...prev]
       })
       close()
     }

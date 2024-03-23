@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react"
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -17,9 +18,12 @@ import dayjs from 'dayjs'
 
 interface StashProps {
   table: TableType
+  setTables: Dispatch<SetStateAction<TableType[]>>
+  edit: (item: TableItem) => void
 }
+// table: {items}
 
-const Stash = ({table: {items}}: StashProps) => {
+const Stash = ({table, setTables, edit}: StashProps) => {
   // sx={{
   //   display: 'flex',
   //   flexDirection: { xs: 'column', sm: 'row' },
@@ -77,6 +81,7 @@ const Stash = ({table: {items}}: StashProps) => {
       <Table sx={{ minWidth: { xs: 250, sm:700, md: 840 } }} aria-label="simple table">
         <TableHead>
           <TableRow>
+          <TableCell align="center"></TableCell>
             <TableCell align="center">Název produktu</TableCell>
             <TableCell align="center">Množství</TableCell>
             <TableCell align="center">Značka</TableCell>
