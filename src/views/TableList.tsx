@@ -31,7 +31,7 @@ const TableList = () => {
 
   return user ?
   (
-    <div className="flex flex-col gap-6 py-8 px-7 md:items-center">
+    <div className="flex flex-col gap-6 py-14 px-7 md:items-center">
       <Button variant="contained" className="w-60" onClick={handleOpen}>Vytvořit tabulku</Button>
       <TheModal open={openModal} close={handleClose} name={AddStashFormName}>
         <AddStahForm setTables={setTables} close={handleClose}/>

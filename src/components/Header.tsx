@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem'
 import AllInboxIcon from '@mui/icons-material/AllInbox'
 import { useLogin } from "../context/LoginProvider"
 
-const pages = [{name: "Domů", page: "/"}, {name:"Tabulky", page:"/tabulky"}]
+const pages = [{name: "Domů", page: "/"}, {name: "Tabulky", page: "/tabulky"}, {name: "Seznam", page: "/seznam"}]
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
