@@ -1,5 +1,4 @@
-// import { useState } from "react"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import Stash from "./Stash"
 import useModal from "../hooks/useModal"
 import Collapse from "./Collapse"
@@ -9,9 +8,6 @@ import Button from '@mui/material/Button'
 import TheModal from "./TheModal"
 import { TableType } from "../types/TableType"
 import { TableItem } from "../types/TableItem"
-// import { TableItem } from "../types/TableItem"
-// import dayjs from 'dayjs'
-
 
 interface StashItemProps {
     table: TableType
@@ -25,7 +21,6 @@ const StashItem = ({table, setTables}: StashItemProps) => {
 
   const handleEdit = (item: TableItem) => {
     handleOpen()
-    console.log(item)
     setEditItem(item)
   }
 

@@ -19,6 +19,7 @@ import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+import ToDoView from './views/ToDoView.tsx'
 
 const theme = createTheme({
   palette: {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "/tabulky",
         element: <TableList />,
+      },
+      {
+        path: "/seznam",
+        element: <ToDoView />,
       },
       {
         path: "/prihlaseni",

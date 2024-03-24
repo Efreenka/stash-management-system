@@ -29,3 +29,14 @@ export interface MemoryProducts {
     brands: string[]
     names: string[]
 }
+
+export interface ToDo {
+    created: string
+    id: number
+    owner_id: number
+    title: string
+}
+
+export interface AddToDoRequest {
+    title: string
+}

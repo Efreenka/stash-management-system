@@ -1,4 +1,4 @@
-import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest, User, MemoryProducts } from "../types/Api"
+import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest, User, MemoryProducts, ToDo, AddToDoRequest } from "../types/Api"
 import { TableType } from "../types/TableType"
 import { TableItem } from "../types/TableItem"
 import { useLogin } from "../context/LoginProvider"
@@ -64,10 +64,8 @@ const useApi = () => {
     }
 
     const getUser = async (): Promise<User | undefined> => {
-
         if(token) {
             try {
-
                 const response = await fetch(`${BASE_URL}/user`, {
                     method: 'GET',
                     credentials: 'include',
@@ -94,10 +92,8 @@ const useApi = () => {
     }
 
     const getStash = async (): Promise<TableType[] | undefined> => {
-
         if(token) {
             try {
-
                 const response = await fetch(`${BASE_URL}/stash`, {
                     method: 'GET',
                     credentials: 'include',
@@ -173,10 +169,8 @@ const useApi = () => {
     }
 
     const getMemoryProducts = async (): Promise<MemoryProducts | undefined> => {
-
         if(token) {
             try {
-
                 const response = await fetch(`${BASE_URL}/select`, {
                     method: 'GET',
                     credentials: 'include',
@@ -195,8 +189,56 @@ const useApi = () => {
             }
         }
     }
+
+    const getToDo = async (): Promise<ToDo[] | undefined> => {
+        if(token) {
+            try {
+                const response = await fetch(`${BASE_URL}/todo`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
     
-    return ({ loginRequest, registerRequest, getUser, getStash, addStash, deleteOneStash, addProduct, getMemoryProducts })
+                if(response.ok) {
+                    const toDo = await response.json()
+                    return toDo
+                } else if (response.status === 500) {
+                    console.error("Chyba backendu!")
+                }
+                
+            } catch (error) {
+                console.error(`Error getting toDo: ${error}`)
+            }
+        }
+    }
+
+    const addToDo = async (data: AddToDoRequest): Promise<ToDo | undefined> => {
+        try {
+            const response = await fetch(`${BASE_URL}/todo`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify( data )
+            })
+
+            if(response.ok) {
+                const newToDo = await response.json()
+                return newToDo
+            } else if (response.status === 500) {
+                console.error("Chyba backendu!")
+            }
+            
+        } catch (error) {
+            console.error(`Error adding toDo: ${error}`)
+        }
+    }
+    
+    return ({ loginRequest, registerRequest, getUser, getStash, addStash, deleteOneStash, addProduct, getMemoryProducts, getToDo, addToDo })
 }
 
 export default useApi
