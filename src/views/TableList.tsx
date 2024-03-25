@@ -37,7 +37,7 @@ const TableList = () => {
         <AddStahForm setTables={setTables} close={handleClose}/>
       </TheModal>
       
-      {tables.map((table) => <StashItem key={table.id} table={table} setTables={setTables}/>)}
+      {tables.map((table) => <StashItem key={table.id} table={table} setTables={setTables} />)}
       
     </div>
   ) 
