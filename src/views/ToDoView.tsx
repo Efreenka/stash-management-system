@@ -5,10 +5,14 @@ import useApi from "../hooks/useApi"
 import { AddToDoRequest, ToDo } from "../types/Api"
 import { useLogin } from "../context/LoginProvider"
 import NotLogin from "./NotLogin"
+import ToDoItem from "../components/ToDoItem"
+import Paper from '@mui/material/Paper'
 
 const ToDoView = () => {
     const [toDoProducts, setToDoProducts] = useState<ToDo[]>([])
     const [formData, setFormData] = useState<AddToDoRequest>({title: ""})
+
+    // const [checked, setChecked] = useState(false)
 
     const { getToDo, addToDo } = useApi()
 
@@ -20,42 +24,50 @@ const ToDoView = () => {
         const response = await addToDo(formData)
         if(response) {
             setToDoProducts((prev: ToDo[]) => {
-                return [...prev, response]
+                return [response, ...prev]
             }) 
          }
          setFormData({title: ""})
     }
+
+    const getToDoProducts = async () => {
+        const data = await getToDo()
+        if(data) {
+            setToDoProducts(data)
+        }
+    }
   
     useEffect(() => {
-        getToDo()
-        .then((data) => {
-            if(data) {
-                setToDoProducts(data)
-            }
-        })
+        getToDoProducts()
     }, [])
 
     return user ? 
     (
         <div className="flex flex-col gap-6 py-14 px-7 items-center">
-            <form onSubmit={formSubmit}>
-            <FormControl >
-                <div className="flex flex-row">
-                    <TextField
-                        required
-                        id="outlined-required"
-                        label="Produkt"
-                        value={formData.title}
-                        onChange={(event) => setFormData({...formData, title: event.target.value})}
-                    />
-
-                    <input type="submit" value="Přidat" className="w-14"/>
+            <h1 className=" text-3xl md:text-5xl pb-6">Nákupní seznam</h1>
+            <Paper elevation={4} variant="outlined">
+                <div className=" md:w-[400px] flex flex-col items-center p-7">
+                    <form onSubmit={formSubmit}>
+                    <FormControl >
+                        <div className="flex flex-row">
+                            <TextField
+                                required
+                                id="outlined-required"
+                                label="Produkt"
+                                value={formData.title}
+                                onChange={(event) => setFormData({...formData, title: event.target.value})}
+                            />
+                            <input type="submit" value="Přidat" className="w-14"/>
+                        </div>
+                    </FormControl>
+                    </form>
+                    <ul className="text-xl pt-6 self-start md:mx-5  ">
+                        {toDoProducts.map((product) => 
+                        <ToDoItem key={product.id} product={product} getToDo={getToDoProducts}/>
+                        )}
+                    </ul>
                 </div>
-            </FormControl>
-            </form>
-            <ul className="text-xl pt-6">
-                {toDoProducts.map((product) => <li key={product.id} className=" list-disc py-3">{product.title}</li>)}
-            </ul>
+            </Paper>
         </div>
     )
     :

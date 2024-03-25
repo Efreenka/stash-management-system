@@ -27,7 +27,10 @@ const Collapse = ({children, name, deleteStash}: PropsWithChildren<CollapseProps
           <div className='flex flex-row items-center gap-3'>
             <Typography>{name}</Typography>
               <Tooltip title={`Smazat tabulku ${name}`}>
-                <IconButton onClick={deleteStash}>
+                <IconButton onClick={(event) => {
+                  event.stopPropagation()
+                  deleteStash()
+                  }}>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>

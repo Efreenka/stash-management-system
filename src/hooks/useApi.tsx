@@ -242,8 +242,28 @@ const useApi = () => {
             console.error(`Error adding toDo: ${error}`)
         }
     }
+
+    const deleteToDo = async (id: number): Promise<boolean | undefined> => {
+        try {
+            const response = await fetch(`${BASE_URL}/todo/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            if (response.ok) {
+                console.log(`ToDo ${id} deleted successfully.`)
+                return true
+            } else {
+                console.error(`Error deleting ToDo ${id}: ${response.statusText}`)
+                return true
+            }
+        } catch (error) {
+            console.error(`Error deleting ToDo ${id}: ${error}`)
+        }
+    }
     
-    return ({ loginRequest, registerRequest, getUser, getStash, addStash, deleteOneStash, addProduct, getMemoryProducts, getToDo, addToDo })
+    return ({ loginRequest, registerRequest, getUser, getStash, addStash, deleteOneStash, addProduct, getMemoryProducts, getToDo, addToDo, deleteToDo })
 }
 
 export default useApi
