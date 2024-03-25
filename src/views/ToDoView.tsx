@@ -3,12 +3,16 @@ import TextField from '@mui/material/TextField'
 import { FormControl } from '@mui/material'
 import useApi from "../hooks/useApi"
 import { AddToDoRequest, ToDo } from "../types/Api"
+import { useLogin } from "../context/LoginProvider"
+import NotLogin from "./NotLogin"
 
 const ToDoView = () => {
     const [toDoProducts, setToDoProducts] = useState<ToDo[]>([])
     const [formData, setFormData] = useState<AddToDoRequest>({title: ""})
 
     const { getToDo, addToDo } = useApi()
+
+    const { user } = useLogin()
 
     const formSubmit = async (event: any) => {
         event.preventDefault()
@@ -31,7 +35,8 @@ const ToDoView = () => {
         })
     }, [])
 
-    return (
+    return user ? 
+    (
         <div className="flex flex-col gap-6 py-14 px-7 items-center">
             <form onSubmit={formSubmit}>
             <FormControl >
@@ -53,6 +58,10 @@ const ToDoView = () => {
             </ul>
         </div>
     )
+    :
+    <div>
+        <NotLogin/>
+    </div>
 }
 
 export default ToDoView

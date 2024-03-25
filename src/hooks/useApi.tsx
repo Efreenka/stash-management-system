@@ -135,15 +135,20 @@ const useApi = () => {
         }
     }
 
-    const deleteOneStash = async (id: number): Promise<void> => {
+    const deleteOneStash = async (id: number): Promise<boolean | undefined> => {
         try {
             const response = await fetch(`${BASE_URL}/stash/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             })
             if (response.ok) {
                 console.log(`OneStash ${id} deleted successfully.`)
+                return true
             } else {
                 console.error(`Error deleting OneStash ${id}: ${response.statusText}`)
+                return true
             }
         } catch (error) {
             console.error(`Error deleting OneStash ${id}: ${error}`)
