@@ -37,12 +37,10 @@ const StashItem = ({table, setTables}: StashItemProps) => {
     if(table.items.length === 0) {
       const response = await deleteOneStash(table.id)
       if(response) {
-        getStash()
-        .then((data) => {
-          if(data) {
-            setTables(data)
-          }
-        })
+        const data = await getStash()
+        if(data) {
+          setTables(data)
+        }
       } 
     } else {
       console.log("Nelze smazat plnou tabulku!")
