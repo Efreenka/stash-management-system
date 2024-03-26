@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography'
 import useApi from "../hooks/useApi"
 import { TableItem } from "../types/TableItem"
 import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
 
 interface StashProps {
   table: TableType
@@ -44,7 +45,7 @@ const Stash = ({table, setTables, edit}: StashProps) => {
       warningColor = "red"
       warningMessage = "Produkt expiruje dnes!"
     } else if (days <= -1) {
-      warningColor = "red"
+      warningColor = "black"
       warningMessage = "Expirace již vypršela!"
     }
 
@@ -60,6 +61,7 @@ const Stash = ({table, setTables, edit}: StashProps) => {
     table.items = newItems
     
     if(response) {
+      toast.success("Produkt se podařilo úspěšně smazat!")
       setTables((prev) => {
         const index: number = prev.findIndex((t) => {
           return t.id === table.id

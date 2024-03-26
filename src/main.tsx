@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { createTheme, ThemeProvider } from '@mui/material'
 import { CookiesProvider } from 'react-cookie'
@@ -8,18 +7,19 @@ import DefaultLayout from './views/layout/DefaultLayout.tsx'
 import Home from './views/Home.tsx'
 import TableList from './views/TableList.tsx'
 import NotFound from './views/NotFound.tsx'
-
 import LoginProvider from './context/LoginProvider.tsx'
 import LoginView from './views/LoginView.tsx'
 import RegistrationView from './views/RegistrationView'
-
+import ToDoView from './views/ToDoView.tsx'
 import { csCZ } from '@mui/x-date-pickers/locales'
-
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import './index.css'
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import ToDoView from './views/ToDoView.tsx'
+
 
 const theme = createTheme({
   palette: {
@@ -37,6 +37,7 @@ const theme = createTheme({
     },
   },
 }, csCZ)
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -73,6 +74,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <CookiesProvider>
+      <ToastContainer autoClose={5000} />
       <LoginProvider>
         <ThemeProvider theme={theme}>
           <RouterProvider router={router} />

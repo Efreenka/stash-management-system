@@ -2,6 +2,7 @@ import { LoginRequest, LoginResponse, RegisterRequest, AddStashFormDataRequest, 
 import { TableType } from "../types/TableType"
 import { TableItem } from "../types/TableItem"
 import { useLogin } from "../context/LoginProvider"
+import { toast } from 'react-toastify'
 
 const BASE_URL = "https://cimaf.cz/sms/api"
 
@@ -22,13 +23,14 @@ const useApi = () => {
 
             if(response.ok) {
                 const newLoginUser = await response.json()
+                toast.success('Úspěšně jsi se přihlásil!')
                 return newLoginUser
             } else if(response.status === 404) {
-                console.error("Uživatel nenalezen!")
+                toast.error("Uživatel nenalezen!")
             } else if(response.status === 401) {
-                console.error("Špatné heslo!")
+                toast.error("Špatné heslo!")
             } else if(response.status === 500) {
-                console.error("Chyba na backendu!")
+                toast.error("Chyba na backendu!")
             }
             
         } catch (error) {
@@ -49,11 +51,12 @@ const useApi = () => {
 
             if(response.ok) {
                 const newRegisterUser = await response.json()
+                toast.success('Uspěšně jsi se zaregistroval!')
                 return newRegisterUser
             } else if (response.status === 400) {
-                console.error("Email již existuje!")
+                toast.error("Email již existuje!")
             } else if(response.status === 500) {
-                console.error("Chyba na backendu!")
+                toast.error("Chyba na backendu!")
             }
             
         } catch (error) {
@@ -76,11 +79,12 @@ const useApi = () => {
                     const user = await response.json()
                     return user
                 } else if (response.status === 401) {
+                    toast.error("Chyba na backendu!")
                     console.error("Token není platný!")
                 } else if (response.status === 404) {
-                    console.error("Uživatel nenalezen!")
+                    toast.error("Uživatel nenalezen!")
                 } else if(response.status === 500) {
-                    console.error("Chyba na backendu!")
+                    toast.error("Chyba na backendu!")
                 }
                 
             } catch (error) {
@@ -103,6 +107,8 @@ const useApi = () => {
                 if(response.ok) {
                     const stash = await response.json()
                     return stash
+                } else {
+                    toast.error("Nepodařilo se získat tabulky!")
                 }
                 
             } catch (error) {
@@ -126,6 +132,8 @@ const useApi = () => {
             if(response.ok) {
                 const newStash = await response.json()
                 return newStash
+            } else {
+                toast.error("Nepodařilo se přidat tabulku!")
             }
             
         } catch (error) {
@@ -142,9 +150,10 @@ const useApi = () => {
                 },
             })
             if (response.ok) {
-                console.log(`OneStash ${id} deleted successfully.`)
+                toast.success("Tabulka úspěšně smazána!")
                 return true
             } else {
+                toast.error("Nepodařilo se smazat tabulku!")
                 console.error(`Error deleting OneStash ${id}: ${response.statusText}`)
                 return true
             }
@@ -164,8 +173,12 @@ const useApi = () => {
                 },
                 body: JSON.stringify({ items })
             })
-            const addProduct = await response.json()
-            return addProduct
+            if (response.ok) {
+                const addProduct = await response.json()
+                return addProduct
+            } else {
+                toast.error("Produkt se nepodařilo přidat!")
+            }
         } catch (error) {
             console.error(`Error adding product: ${error}`)
         }
@@ -185,6 +198,8 @@ const useApi = () => {
                 if(response.ok) {
                     const memoryProducts = await response.json()
                     return memoryProducts
+                } else {
+                    toast.error("Produkty pro našeptávač se nepodařilo přidat!")
                 }
                 
             } catch (error) {
@@ -208,7 +223,7 @@ const useApi = () => {
                     const toDo = await response.json()
                     return toDo
                 } else if (response.status === 500) {
-                    console.error("Chyba backendu!")
+                    toast.error("Chyba backendu!")
                 }
                 
             } catch (error) {
@@ -233,7 +248,7 @@ const useApi = () => {
                 const newToDo = await response.json()
                 return newToDo
             } else if (response.status === 500) {
-                console.error("Chyba backendu!")
+                toast.error("Chyba backendu!")
             }
             
         } catch (error) {
@@ -250,9 +265,10 @@ const useApi = () => {
                 },
             })
             if (response.ok) {
-                console.log(`ToDo ${id} deleted successfully.`)
+                toast.success("Produkt byl úspěšně smazán ze seznamu!")
                 return true
             } else {
+                toast.success("Produkt se nepodařilo smazat ze seznamu!")
                 console.error(`Error deleting ToDo ${id}: ${response.statusText}`)
                 return true
             }

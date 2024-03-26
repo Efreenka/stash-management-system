@@ -5,6 +5,7 @@ import { FormControl } from '@mui/material'
 import { LoginRequest } from "../types/Api"
 import useApi  from "../hooks/useApi"
 import { useLogin } from "../context/LoginProvider"
+import { toast } from 'react-toastify'
 
 const LoginForm = () => {
     const [formData, setFormData] = useState<LoginRequest>({email: "", password: ""})
@@ -18,6 +19,9 @@ const LoginForm = () => {
         const response = await loginRequest(formData)
         if (response) {
             login(response)
+            setFormData({email: "", password: ""})
+        } else {
+            toast.error('Chyba! Vyplňte správně formulář!')
         }
     }
 
@@ -29,8 +33,8 @@ const LoginForm = () => {
                     label="Email"
                     type="email"
                     value={formData.email}
-                    onChange={(event) => setFormData({...formData, email: event.target.value})}
-                />
+                    onChange={(event) => setFormData({...formData, email: event.target.value})}/>
+
                 <TextField
                     required
                     label="Heslo"

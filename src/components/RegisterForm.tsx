@@ -4,21 +4,31 @@ import Button from '@mui/material/Button'
 import { FormControl } from '@mui/material'
 import { RegisterRequest } from '../types/Api'
 import useApi  from "../hooks/useApi"
+import { useNavigate } from "react-router-dom"
+import { toast } from 'react-toastify'
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState<RegisterRequest>({name: "", email: "", password: ""})
     const [passwordVerification, setPasswordVerification] = useState<string>("")
+    const [passwordError, setPasswordError] = useState(false)
+
+    const navigate = useNavigate()
 
     const { registerRequest } = useApi()
 
     const handleRegistration = async (event: SyntheticEvent) => {
         event.preventDefault()
         if(formData.password === passwordVerification) {
+            setPasswordError(false)
             const response = await registerRequest(formData)
+            if(response) {
+                navigate("/prihlaseni")
+            }
             setPasswordVerification("")
-            console.log(response)
+            setFormData({name: "", email: "", password: ""})
         } else {
-            console.log("Špatné heslo")
+            setPasswordError(true)
+            toast.error('Chyba! Vyplňte správně formulář!')
         }
     }
 
@@ -46,6 +56,8 @@ const RegisterForm = () => {
                     type="password"
                     value={formData.password}
                     onChange={(event) => setFormData({...formData, password: event.target.value})}
+                    error={passwordError}
+                    helperText={passwordError ? "Hesla se musí shodovat" : ""}
                 />
 
                 <TextField
@@ -54,6 +66,8 @@ const RegisterForm = () => {
                     type="password"
                     value={passwordVerification}
                     onChange={(event) => setPasswordVerification(event.target.value)}
+                    error={passwordError}
+                    helperText={passwordError ? "Hesla se musí shodovat" : ""}
                 />
 
                 <Button type="submit">Registrovat se</Button>

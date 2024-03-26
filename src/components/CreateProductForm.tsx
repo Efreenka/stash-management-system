@@ -27,21 +27,16 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
 
   const handleAddProduct = async (event: SyntheticEvent) => {
     event.preventDefault()
-    console.log(table.items)
     const allItems: TableItem[] = [...table.items, formData]
-    console.log(allItems)
     const response: TableItem[] | undefined = await addProduct(table.id, allItems)
-    console.log(response)
     table.items = response!
-    
+
     if(response) {
       setTables((prev) => {
         const index: number = prev.findIndex((t) => {
           return t.id === table.id
         })
-        console.log(index)
         prev.splice(index, 1, table)
-        console.log(prev)
         return [...prev]
       })
       close()
@@ -71,8 +66,12 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
           }}
     
           renderInput={(params) => (
-            <TextField {...params} label="Název Produktu" variant="outlined"
-            onChange={(event: ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: event.target.value})}
+            <TextField 
+              {...params} 
+              required 
+              label="Název Produktu" 
+              variant="outlined"
+              onChange={(event: ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: event.target.value})}
             />
           )}
         />
@@ -97,7 +96,7 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
           }}
     
           renderInput={(params) => (
-            <TextField {...params} label="Značka produktu" variant="outlined" 
+            <TextField {...params} required label="Značka produktu" variant="outlined" 
             onChange={(event) => setFormData({...formData, brand: event.target.value})}
             />
           )}
@@ -133,7 +132,7 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
           onChange={(event) => setFormData({...formData, warning_days: parseInt(event.target.value)})}
         />
         
-        <Button type="submit" >Vytvořit</Button>
+        <Button variant="contained" sx={{width: "100px", alignSelf:"center"}} type="submit" >Přidat</Button>
       </FormControl>
     </form>
   )
