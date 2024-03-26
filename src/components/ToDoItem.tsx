@@ -1,7 +1,7 @@
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { ToDo } from '../types/Api'
-import { useEffect, useState } from "react"
+import { SyntheticEvent, useEffect, useState } from "react"
 import useApi from '../hooks/useApi'
 
 interface ToDoItemProps {
@@ -14,7 +14,7 @@ const ToDoItem = ({product, getToDo}: ToDoItemProps) => {
 
     const { deleteToDo } = useApi()
 
-    const handleChange = (event: any) => {
+    const handleChange = (event: SyntheticEvent) => {
         event.preventDefault()
         setChecked((prev) => !prev)
         

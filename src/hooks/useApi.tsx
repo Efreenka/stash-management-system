@@ -4,8 +4,6 @@ import { TableItem } from "../types/TableItem"
 import { useLogin } from "../context/LoginProvider"
 
 const BASE_URL = "https://cimaf.cz/sms/api"
-// const BASE_URL = "https://cimaf.cz"
-// const BASE_URL = "https://[2001:15e8:110:7d00::178]"
 
 const useApi = () => {
     const { getToken } = useLogin()

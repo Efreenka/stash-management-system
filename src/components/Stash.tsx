@@ -21,14 +21,8 @@ interface StashProps {
   setTables: Dispatch<SetStateAction<TableType[]>>
   edit: (item: TableItem) => void
 }
-// table: {items}
 
 const Stash = ({table, setTables, edit}: StashProps) => {
-  // sx={{
-  //   display: 'flex',
-  //   flexDirection: { xs: 'column', sm: 'row' },
-  //   gap: 2,
-  // }}
 
   const { addProduct } = useApi()
   

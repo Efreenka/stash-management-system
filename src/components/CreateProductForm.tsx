@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction, useEffect } from "react"
+import { useState, Dispatch, SetStateAction, useEffect, SyntheticEvent, ChangeEvent } from "react"
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { FormControl } from '@mui/material'
@@ -25,7 +25,8 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
 
   const { addProduct, getMemoryProducts } = useApi()
 
-  const handleAddProduct = async () => {
+  const handleAddProduct = async (event: SyntheticEvent) => {
+    event.preventDefault()
     console.log(table.items)
     const allItems: TableItem[] = [...table.items, formData]
     console.log(allItems)
@@ -57,83 +58,84 @@ const CreateProductForm = ({table, setTables, close}: CreateProductFormProps) =>
   }, [])
 
   return (
-    <FormControl className="flex flex-col gap-4">
-      <Autocomplete
-        freeSolo
-        options={memoryData.names}
-        id="controlled-demo"
-        value={formData.name}
-        onChange={(event: any, newValue: any) => {
-          setFormData({...formData, name: newValue})
-        }}
-  
-        renderInput={(params) => (
-          <TextField {...params} label="Název Produktu" variant="outlined" id="outlined-required"  
-          onChange={(event: any) => setFormData({...formData, name: event.target.value})}
-          />
-        )}
-      />
-
-      <TextField
-        required
-        id="outlined-required, formatted-numberformat-input"
-        label="Množství"
-        type="number"
-        inputProps={{ min: 1, max: 10000000 }}
-        value={formData.quantity}
-        onChange={(event) => setFormData({...formData, quantity: parseInt(event.target.value)})}
-      />
-
-      <Autocomplete
-        freeSolo
-        options={memoryData.brands}
-        id="controlled-demo"
-        value={formData.brand}
-        onChange={(event: any, newValue: any) => {
-          setFormData({...formData, brand: newValue})
-        }}
-  
-        renderInput={(params) => (
-          <TextField {...params} label="Značka produktu" variant="outlined" id="outlined-required"  
-          onChange={(event: any) => setFormData({...formData, brand: event.target.value})}
-          />
-        )}
-      />
+    <form onSubmit={handleAddProduct}>
+      <FormControl className="flex flex-col gap-4">
+        <Autocomplete
+          freeSolo
+          options={memoryData.names}
+          value={formData.name}
+          onChange={(_event, newValue) => {
+            if(newValue) {
+              setFormData({...formData, name: newValue})
+            }
+          }}
     
-      <TextField
-        required
-        id="outlined-required, formatted-numberformat-input"
-        label="Váha produktu&nbsp;(g)"
-        type="number"
-        inputProps={{ min: 0, max: 10000000 }}
-        value={formData.weight}
-        onChange={(event) => setFormData({...formData, weight: parseInt(event.target.value)})}
-      />
-
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DatePicker', 'DatePicker']}>
-          <DemoItem label="Expirace">
-            <DatePicker
-              format="DD. MM. YYYY"
-              defaultValue={formData.expiration}
-              onChange={(value) => setFormData({...formData, expiration: dayjs(value)})}
+          renderInput={(params) => (
+            <TextField {...params} label="Název Produktu" variant="outlined"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: event.target.value})}
             />
-          </DemoItem>
-        </DemoContainer>
-      </LocalizationProvider>
+          )}
+        />
 
-      <TextField
-        required
-        id="outlined-required, formatted-numberformat-input"
-        label="Varování&nbsp;(dny)"
-        type="number"
-        inputProps={{ min: 1, max: 10000000 }}
-        value={formData.warning_days}
-        onChange={(event) => setFormData({...formData, warning_days: parseInt(event.target.value)})}
-      />
+        <TextField
+          required
+          label="Množství"
+          type="number"
+          inputProps={{ min: 1, max: 10000000 }}
+          value={formData.quantity}
+          onChange={(event) => setFormData({...formData, quantity: parseInt(event.target.value)})}
+        />
+
+        <Autocomplete
+          freeSolo
+          options={memoryData.brands}
+          value={formData.brand}
+          onChange={(_event, newValue) => {
+            if(newValue) {
+              setFormData({...formData, brand: newValue})
+            }
+          }}
+    
+          renderInput={(params) => (
+            <TextField {...params} label="Značka produktu" variant="outlined" 
+            onChange={(event) => setFormData({...formData, brand: event.target.value})}
+            />
+          )}
+        />
       
-      <Button onClick={handleAddProduct}>Vytvořit</Button>
-    </FormControl>
+        <TextField
+          required
+          label="Váha produktu&nbsp;(g)"
+          type="number"
+          inputProps={{ min: 0, max: 10000000 }}
+          value={formData.weight}
+          onChange={(event) => setFormData({...formData, weight: parseInt(event.target.value)})}
+        />
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker', 'DatePicker']}>
+            <DemoItem label="Expirace">
+              <DatePicker
+                format="DD. MM. YYYY"
+                defaultValue={formData.expiration}
+                onChange={(value) => setFormData({...formData, expiration: dayjs(value)})}
+              />
+            </DemoItem>
+          </DemoContainer>
+        </LocalizationProvider>
+
+        <TextField
+          required
+          label="Varování&nbsp;(dny)"
+          type="number"
+          inputProps={{ min: 1, max: 10000000 }}
+          value={formData.warning_days}
+          onChange={(event) => setFormData({...formData, warning_days: parseInt(event.target.value)})}
+        />
+        
+        <Button type="submit" >Vytvořit</Button>
+      </FormControl>
+    </form>
   )
 }
 

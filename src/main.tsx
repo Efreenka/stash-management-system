@@ -71,7 +71,7 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <CookiesProvider>
       <LoginProvider>
         <ThemeProvider theme={theme}>
@@ -79,5 +79,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </ThemeProvider>
       </LoginProvider>
     </CookiesProvider>
-//   </React.StrictMode>
+  </React.StrictMode>
 )

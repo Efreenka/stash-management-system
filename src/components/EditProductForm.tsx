@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react"
+import { useState, Dispatch, SetStateAction, SyntheticEvent } from "react"
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { FormControl } from '@mui/material'
@@ -23,7 +23,8 @@ const CreateProductForm = ({table, setTables, close, editItem}: CreateProductFor
 
   const { addProduct } = useApi()
 
-  const handleEditProduct = async () => {
+  const handleEditProduct = async (event: SyntheticEvent) => {
+    event.preventDefault()
     const index = table.items.findIndex((i) => {
         return i.id === editItem.id
     })
@@ -48,67 +49,64 @@ const CreateProductForm = ({table, setTables, close, editItem}: CreateProductFor
   }  
 
   return (
-    <FormControl className="flex flex-col gap-4">
-      <TextField
-        required
-        id="outlined-required"
-        label="Název produktu"
-        value={formData.name}
-        onChange={(event) => setFormData({...formData, name: event.target.value})}
-      />
+    <form onSubmit={handleEditProduct}>
+      <FormControl className="flex flex-col gap-4">
+        <TextField
+          required
+          label="Název produktu"
+          value={formData.name}
+          onChange={(event) => setFormData({...formData, name: event.target.value})}
+        />
 
-      <TextField
-        required
-        id="outlined-required, formatted-numberformat-input"
-        label="Množství"
-        type="number"
-        inputProps={{ min: 1, max: 10000000 }}
-        value={formData.quantity}
-        onChange={(event) => setFormData({...formData, quantity: parseInt(event.target.value)})}
-      />  
+        <TextField
+          required
+          label="Množství"
+          type="number"
+          inputProps={{ min: 1, max: 10000000 }}
+          value={formData.quantity}
+          onChange={(event) => setFormData({...formData, quantity: parseInt(event.target.value)})}
+        />  
 
-      <TextField
-        required
-        id="outlined-required"
-        label="Značka produktu"
-        value={formData.brand}
-        onChange={(event) => setFormData({...formData, brand: event.target.value})}
-      />
-    
-      <TextField
-        required
-        id="outlined-required, formatted-numberformat-input"
-        label="Váha produktu&nbsp;(g)"
-        type="number"
-        inputProps={{ min: 0, max: 10000000 }}
-        value={formData.weight}
-        onChange={(event) => setFormData({...formData, weight: parseInt(event.target.value)})}
-      />
-
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DatePicker', 'DatePicker']}>
-          <DemoItem label="Expirace">
-            <DatePicker
-              format="DD. MM. YYYY"
-              defaultValue={dayjs(formData.expiration)}
-              onChange={(value) => setFormData({...formData, expiration: dayjs(value)})}
-            />
-          </DemoItem>
-        </DemoContainer>
-      </LocalizationProvider>
-
-      <TextField
-        required
-        id="outlined-required, formatted-numberformat-input"
-        label="Varování&nbsp;(dny)"
-        type="number"
-        inputProps={{ min: 1, max: 10000000 }}
-        value={formData.warning_days}
-        onChange={(event) => setFormData({...formData, warning_days: parseInt(event.target.value)})}
-      />
+        <TextField
+          required
+          label="Značka produktu"
+          value={formData.brand}
+          onChange={(event) => setFormData({...formData, brand: event.target.value})}
+        />
       
-      <Button onClick={handleEditProduct}>Upravit</Button>
-    </FormControl>
+        <TextField
+          required
+          label="Váha produktu&nbsp;(g)"
+          type="number"
+          inputProps={{ min: 0, max: 10000000 }}
+          value={formData.weight}
+          onChange={(event) => setFormData({...formData, weight: parseInt(event.target.value)})}
+        />
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker', 'DatePicker']}>
+            <DemoItem label="Expirace">
+              <DatePicker
+                format="DD. MM. YYYY"
+                defaultValue={dayjs(formData.expiration)}
+                onChange={(value) => setFormData({...formData, expiration: dayjs(value)})}
+              />
+            </DemoItem>
+          </DemoContainer>
+        </LocalizationProvider>
+
+        <TextField
+          required
+          label="Varování&nbsp;(dny)"
+          type="number"
+          inputProps={{ min: 1, max: 10000000 }}
+          value={formData.warning_days}
+          onChange={(event) => setFormData({...formData, warning_days: parseInt(event.target.value)})}
+        />
+        
+        <Button type="submit">Upravit</Button>
+      </FormControl>
+    </form>
   )
 }
 

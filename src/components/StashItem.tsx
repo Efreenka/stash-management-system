@@ -48,19 +48,23 @@ const StashItem = ({table, setTables}: StashItemProps) => {
   }
 
   return (
-    <Collapse name={table.name} deleteStash={deleteStash}> 
-      <Stash table={table} setTables={setTables} edit={handleEdit}/>
-      <Button variant="contained" onClick={handleOpen}>Přidat</Button>
-        {editItem 
-        ? 
-        <TheModal open={openModal} close={handleCloseEdit} name={"Upravte produkt: "}>
-        <EditProductForm table={table} setTables={setTables} close={handleCloseEdit} editItem={editItem}/>
-      </TheModal>
-        : 
-        <TheModal open={openModal} close={handleClose} name={"Přidejte produkt: "}>
-        <CreateProductForm table={table} setTables={setTables} close={handleClose}/>
-      </TheModal>
-        }    
+    <Collapse name={table.name} deleteStash={deleteStash} >
+      <div className="flex flex-col gap-5">
+
+      
+        <Stash table={table} setTables={setTables} edit={handleEdit}/>
+        <Button variant="contained" onClick={handleOpen} sx={{width: "110px"}}>Přidat</Button>
+          {editItem 
+          ? 
+          <TheModal open={openModal} close={handleCloseEdit} name={"Upravte produkt: "}>
+            <EditProductForm table={table} setTables={setTables} close={handleCloseEdit} editItem={editItem}/>
+          </TheModal>
+          : 
+          <TheModal open={openModal} close={handleClose} name={"Přidejte produkt: "}>
+            <CreateProductForm table={table} setTables={setTables} close={handleClose}/>
+          </TheModal>
+          }    
+      </div>
     </Collapse> 
   )
 }

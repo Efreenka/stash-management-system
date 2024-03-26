@@ -21,6 +21,7 @@ const TableList = () => {
   const { getStash } = useApi()
   
   useEffect(() => {
+    document.title = "Tabulky"
     getStash()
     .then((data) => {
       if(data) {
@@ -38,7 +39,6 @@ const TableList = () => {
       </TheModal>
       
       {tables.map((table) => <StashItem key={table.id} table={table} setTables={setTables} />)}
-      
     </div>
   ) 
   : 

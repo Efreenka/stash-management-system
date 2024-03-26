@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem'
 import AllInboxIcon from '@mui/icons-material/AllInbox'
 import { useLogin } from "../context/LoginProvider"
 
-const pages = [{name: "Domů", page: "/"}, {name: "Tabulky", page: "/tabulky"}, {name: "Seznam", page: "/seznam"}]
+const pages = [{name: "Domů", page: "/"}, {name: "Tabulky", page: "/tabulky"}, {name: "Nákupní Seznam", page: "/seznam"}]
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
@@ -72,7 +72,6 @@ const Header = () => {
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: 'bottom',
@@ -91,7 +90,7 @@ const Header = () => {
             >
               {pages.map((page, index) => (
                 <MenuItem key={index} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center"><NavLink to={`${page.page}`} >{page.name}</NavLink></Typography>
+                  <Typography textAlign="center"><NavLink to={`${page.page}`} className={({isActive}) => isActive ? " underline underline-offset-4": ""}>{page.name}</NavLink></Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -119,9 +118,9 @@ const Header = () => {
               <Button
                 key={index}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, mx: 1, color: 'white', display: 'block'}}
               >
-                <NavLink to={`${page.page}`} >{page.name}</NavLink>
+                <NavLink to={`${page.page}`} className={({isActive}) => isActive ? " underline underline-offset-4": ""}>{page.name}</NavLink>
               </Button>
             ))}
           </Box>
@@ -135,7 +134,6 @@ const Header = () => {
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
-              id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: 'top',
@@ -149,9 +147,6 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem  onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Profil</Typography>
-              </MenuItem>
               <MenuItem  onClick={handleCloseUserMenu}>
                 <Typography textAlign="center" onClick={() => logout()}>Odhlásit se</Typography>
               </MenuItem>

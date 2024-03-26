@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
+import { useEffect } from 'react'
 
 const NotLogin = () => {
+  useEffect(() => {
+    document.title = "Nepřihlášen"
+  })
+
   return (
     <div className='w-[500px] h-[400px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center'>
       <h1 className='text-5xl'>Nejste přihlášen!</h1>

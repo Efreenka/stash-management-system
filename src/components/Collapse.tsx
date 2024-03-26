@@ -22,7 +22,6 @@ const Collapse = ({children, name, deleteStash}: PropsWithChildren<CollapseProps
         <AccordionSummary
             expandIcon={<ArrowDropDownIcon />}
             aria-controls="panel2-content"
-            id="panel2-header"
         >
           <div className='flex flex-row items-center gap-3'>
             <Typography>{name}</Typography>

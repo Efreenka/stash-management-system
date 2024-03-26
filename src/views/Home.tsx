@@ -1,4 +1,10 @@
+import { useEffect } from "react"
+
 const Home = () => {
+  useEffect(() => {
+    document.title = "Domů"
+  })
+
   return (
     <div className="text-center flex flex-col gap-5 py-8 px-7">
       <h1>Lorem ipsum</h1>

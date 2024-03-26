@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, SyntheticEvent, useState } from "react"
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { FormControl } from '@mui/material'
@@ -16,7 +16,8 @@ const AddStahForm = ({setTables, close}: AddStashFormDataProps) => {
 
     const { addStash } = useApi()
 
-    const handleAddStash = async () => {
+    const handleAddStash = async (event: SyntheticEvent) => {
+        event.preventDefault()
         const response = await addStash(formData)
         if(response) {
             setTables((prev: TableType[]) => {
@@ -27,16 +28,17 @@ const AddStahForm = ({setTables, close}: AddStashFormDataProps) => {
     }
 
     return (
-        <FormControl className="flex flex-col gap-4">
-            <TextField
-                required
-                id="outlined-required"
-                label="Název tabulky"
-                value={formData.name}
-                onChange={(event) => setFormData({name: event.target.value})}
-            />
-            <Button onClick={handleAddStash}>Vytvořit</Button>
-        </FormControl>
+        <form onSubmit={handleAddStash}>
+            <FormControl className="flex flex-col gap-4">
+                <TextField
+                    required
+                    label="Název tabulky"
+                    value={formData.name}
+                    onChange={(event) => setFormData({name: event.target.value})}
+                />
+                <Button variant="contained" type="submit">Vytvořit</Button>
+            </FormControl>
+        </form>
     )
 }
 

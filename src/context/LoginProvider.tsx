@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, PropsWithChildren, Dispatch, SetStateAction } from 'react'
-import { LoginResponse, User } from '../types/Api';
+import { LoginResponse, User } from '../types/Api'
 import { useCookies } from 'react-cookie'
 
 interface LoginProviderProps {
@@ -8,7 +8,6 @@ interface LoginProviderProps {
     logout: () => void
     getToken: () => string
     setUser:  Dispatch<SetStateAction<User | null>> 
-    // cookies: string
 }
 
 const LoginContext = createContext<LoginProviderProps>({ user: null, login: () => {}, logout: () => {}, getToken: () => 'access_token', setUser: () => {}})
